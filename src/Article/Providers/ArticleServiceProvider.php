@@ -73,7 +73,7 @@ class ArticleServiceProvider extends ServiceProvider
 
         // 注册安装数据
         if (\Request::is('install/*')) {
-            app(Hook::class)->add('service', 'type', 'getInstallData', function () {
+            app(\Duxravel\Core\Util\Hook::class)->add('service', 'type', 'getInstallData', function () {
                 return \Duxravel\Article\Seeders\DatabaseSeeder::class;
             });
         }
