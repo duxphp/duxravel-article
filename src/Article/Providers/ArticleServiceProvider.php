@@ -34,6 +34,10 @@ class ArticleServiceProvider extends ServiceProvider
             $this->loadRoutesFrom(realpath(__DIR__ . '/../Route/Api.php'));
         });
 
+        $router->group(['middleware' => ['web']], function () {
+            $this->loadRoutesFrom(realpath(__DIR__ . '/../Route/Web.php'));
+        });
+
         if (\Request::is('admin/*')) {
             // 注册菜单
             app(\Duxravel\Core\Util\Menu::class)->add('admin', function () {
