@@ -53,9 +53,9 @@ class ArticleServiceProvider extends ServiceProvider
 
 
         // 文章分类
-        Blade::loopMake('articleclass', \Modules\Article\Service\Blade::class, 'articleClass');
+        \Duxravel\Core\Util\Blade::loopMake('articleclass', \Modules\Article\Service\Blade::class, 'articleClass');
         // 文章列表
-        Blade::loopMake('article', \Modules\Article\Service\Blade::class, 'article', static function ($params) {
+        \Duxravel\Core\Util\Blade::loopMake('article', \Modules\Article\Service\Blade::class, 'article', static function ($params) {
             $key = $params['assign'] ?: '$data';
             return <<<DATA
                 if (method_exists($key, 'links')) {
@@ -65,7 +65,7 @@ class ArticleServiceProvider extends ServiceProvider
         });
 
         // 标签列表
-        Blade::loopMake('tags', \Modules\Article\Service\Blade::class, 'tags');
+        \Duxravel\Core\Util\Blade::loopMake('tags', \Modules\Article\Service\Blade::class, 'tags');
 
         // 注册数据库目录
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../../../database/migrations'));
