@@ -26,9 +26,6 @@ class ArticleServiceProvider extends ServiceProvider
     public function boot(Router $router)
     {
         // 注册公共路由
-        $router->group(['prefix' => 'admin', 'public' => true, 'auth_has' => 'admin', 'middleware' => ['web']], function () {
-            $this->loadRoutesFrom(realpath(__DIR__ . '/../Route/Admin.php'));
-        });
         $router->group(['prefix' => 'admin', 'auth_has' => 'admin', 'middleware' => ['auth.manage']], function () {
             $this->loadRoutesFrom(realpath(__DIR__ . '/../Route/AuthAdmin.php'));
         });
