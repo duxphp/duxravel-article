@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\System\Providers;
+namespace Modules\Article\Providers;
 
 use Duxravel\Core\Util\Menu;
 use Illuminate\Routing\Router;
