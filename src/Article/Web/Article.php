@@ -25,7 +25,7 @@ class Article extends Base
         if (!$info) {
             app_error('新闻不存在', 404);
         }
-        $classInfo = \Modules\Article\Model\ArticleClass::find($info->class_id);
+        $classInfo = \Modules\Article\Model\ArticleClass::find($info->class[0]->class_id);
         if (!$classInfo) {
             app_error('栏目不存在', 404);
         }
