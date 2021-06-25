@@ -25,34 +25,6 @@ class ArticleServiceProvider extends ServiceProvider
      */
     public function boot(Router $router)
     {
-        // 注册公共路由
-        $router->group(['prefix' => 'admin', 'auth_has' => 'admin', 'middleware' => ['auth.manage']], function () {
-            $this->loadRoutesFrom(realpath(__DIR__ . '/../Route/AuthAdmin.php'));
-        });
-
-        $router->group(['middleware' => ['api']], function () {
-            $this->loadRoutesFrom(realpath(__DIR__ . '/../Route/Api.php'));
-        });
-
-        $router->group(['middleware' => ['web']], function () {
-            $this->loadRoutesFrom(realpath(__DIR__ . '/../Route/Web.php'));
-        });
-
-        if (\Request::is('admin/*')) {
-            // 注册菜单
-            app(\Duxravel\Core\Util\Menu::class)->add('admin', function () {
-                return app(\Modules\Article\Service\Menu::class)->getAdminMenu();
-            });
-            // 注册钩子接口
-            app(\Duxravel\Core\Util\Hook::class)->add('service', 'type', 'getMenuUrl', function () {
-                return app(\Modules\Article\Service\Type::class)->getMenuUrl();
-            });
-            app(\Duxravel\Core\Util\Hook::class)->add('service', 'type', 'getQuickSearch', function () {
-                return app(\Modules\Article\Service\Type::class)->getQuickSearch();
-            });
-        }
-
-
         // 文章分类
         \Duxravel\Core\Util\Blade::loopMake('articleclass', \Modules\Article\Service\Blade::class, 'articleClass');
         // 文章列表
@@ -64,19 +36,11 @@ class ArticleServiceProvider extends ServiceProvider
                 }
             DATA;
         });
-
         // 标签列表
         \Duxravel\Core\Util\Blade::loopMake('tags', \Modules\Article\Service\Blade::class, 'tags');
 
         // 注册数据库目录
         $this->loadMigrationsFrom(realpath(__DIR__ . '/../../../database/migrations'));
-
-        // 注册安装数据
-        if (\Request::is('install/*')) {
-            app(\Duxravel\Core\Util\Hook::class)->add('service', 'type', 'getInstallData', function () {
-                return \Duxravel\Article\Seeders\DatabaseSeeder::class;
-            });
-        }
 
     }
 }
