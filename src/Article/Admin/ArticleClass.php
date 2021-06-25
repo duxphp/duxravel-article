@@ -60,7 +60,7 @@ class ArticleClass extends ArticleExpend
         $form->text('分类模板', 'tpl_class');
         $form->text('内容模板', 'tpl_content');
 
-        $form->before(function ($data, $type, $model) {
+        $form->front(function ($data, $type, $model) {
             $model->model_id = $this->modelId;
             if ($data['parent_id']) {
                 $model = $model->appendToNode($this->model::find($data['parent_id']));
