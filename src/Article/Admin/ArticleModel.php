@@ -45,7 +45,7 @@ class ArticleModel extends \Modules\System\Admin\Expend
         $form->text('内容模板', 'tpl_content');
 
         $form->select('表单绑定', 'form_id', function () {
-            return  Duxravel\Core\Model\Form::get()->prepend([
+            return  \Duxravel\Core\Model\Form::get()->prepend([
                 'form_id' => 0,
                 'name' => '暂不绑定'
             ])->pluck('name', 'form_id')->toArray();
