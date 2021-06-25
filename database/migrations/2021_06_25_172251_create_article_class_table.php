@@ -15,8 +15,8 @@ class CreateArticleClassTable extends Migration
     {
         Schema::table('article_class', function (Blueprint $table) {
             $table->string('image')->nullable()->after('name');
-            $table->string('tpl_class')->nullable()->after('image');
-            $table->string('tpl_content')->nullable()->after('image');
+            $table->string('tpl_class')->nullable()->after('name');
+            $table->string('tpl_content')->nullable()->after('name');
         });
     }
 
