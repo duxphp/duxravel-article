@@ -62,9 +62,6 @@ class ArticleClass extends ArticleExpend
 
         $form->front(function ($data, $type, $model) {
             $model->model_id = $this->modelId;
-            if ($data['parent_id']) {
-                $model = $model->appendToNode($this->model::find($data['parent_id']));
-            }
             return $model;
         });
         return $form;
