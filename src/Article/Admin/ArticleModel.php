@@ -40,7 +40,9 @@ class ArticleModel extends \Modules\System\Admin\Expend
             'required',
         ], [
             'required' => '请填写模型名称',
-        ]);;
+        ]);
+        $form->text('分类模板', 'tpl_class');
+        $form->text('内容模板', 'tpl_content');
 
         $form->select('表单绑定', 'form_id', function () {
             return  module('System.Model.Form')->get()->prepend([
