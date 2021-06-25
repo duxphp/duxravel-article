@@ -39,7 +39,7 @@
       "route": [
         "src/Article/Route/Api.php",
         "src/Article/Route/AuthAdmin.php",
-        "src/Tools/Route/Web.php"
+        "src/Article/Route/Web.php"
       ]
     }
   },
