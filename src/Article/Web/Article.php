@@ -56,10 +56,10 @@ class Article extends Base
 
     private function getParentValue($classInfo, $name)
     {
-        $classInfo->ancestorsAndSelf($classInfo->class_id);
+        $list = $classInfo->ancestorsAndSelf($classInfo->class_id);
         $modelInfo = \Modules\Article\Model\ArticleModel::find($classInfo->model_id);
         $value = '';
-        foreach ($classInfo as $item) {
+        foreach ($list as $item) {
             if ($item->{$name}) {
                 $value = $item->{$name};
                 break;
