@@ -43,7 +43,6 @@ class Article extends ArticleExpend
                 "MATCH(title,content) AGAINST(?)",
                 [$value]
             );
-
         })->text('请输入文章标题')->quick();
         $table->filter('分类', 'class_id', function ($query, $value) {
             $classIds = (new \Modules\Article\Model\ArticleClass())->find($value)->descendantsAndSelf($value)->pluck('class_id');
@@ -98,6 +97,7 @@ class Article extends ArticleExpend
                 return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->orderBy('sort', 'desc')->orderBy('class_id', 'asc')->get(['class_id as id', 'parent_id as pid', 'name']);
             }, 'class')->must()->multi();
             $form->text('标题', 'title');
+            $form->text('副标题', 'subtitle');
 
             $form->checkbox('属性', 'attrs', function () {
                 return \Modules\Article\Model\ArticleAttribute::orderBy('attr_id', 'asc')->pluck('name', 'attr_id');
@@ -140,7 +140,7 @@ class Article extends ArticleExpend
 
     public function dataSearch(): array
     {
-        return ['title'];
+        return ['title', 'subtitle'];
     }
 
     public function dataField(): array
