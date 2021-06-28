@@ -14,7 +14,7 @@ class UpdateArticleClassTableV2 extends Migration
     public function up()
     {
         Schema::table('article_class', function (Blueprint $table) {
-            $table->string('subname')->nullable()->after('subname');
+            $table->string('subname')->nullable()->after('name');
         });
     }
 
