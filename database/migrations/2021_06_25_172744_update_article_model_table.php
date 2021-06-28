@@ -14,8 +14,8 @@ class UpdateArticleModelTable extends Migration
     public function up()
     {
         Schema::table('article_model', function (Blueprint $table) {
-            $table->string('tpl_class')->nullable()->after('name');
-            $table->string('tpl_content')->nullable()->after('name');
+            $table->string('tpl_class', 250)->nullable()->after('name');
+            $table->string('tpl_content', 250)->nullable()->after('name');
         });
     }
 

@@ -56,6 +56,8 @@ class ArticleClass extends ArticleExpend
             'required' => '请填写分类名称',
         ]);
 
+        $form->text('分类副名称', 'subname');
+
         $form->image('封面图', 'image');
         $form->text('分类模板', 'tpl_class');
         $form->text('内容模板', 'tpl_content');

@@ -14,9 +14,9 @@ class UpdateArticleClassTable extends Migration
     public function up()
     {
         Schema::table('article_class', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('name');
-            $table->string('tpl_class')->nullable()->after('name');
-            $table->string('tpl_content')->nullable()->after('name');
+            $table->string('image', 250)->nullable()->after('name');
+            $table->string('tpl_class', 250)->nullable()->after('name');
+            $table->string('tpl_content', 250)->nullable()->after('name');
         });
     }
 
