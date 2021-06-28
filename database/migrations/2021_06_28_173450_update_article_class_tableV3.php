@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateArticleClassTable extends Migration
+class UpdateArticleClassTableV3 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class UpdateArticleClassTable extends Migration
     public function up()
     {
         Schema::table('article_class', function (Blueprint $table) {
-            $table->string('image', 250)->nullable()->comment('封面图')->after('name');
-            $table->string('tpl_class', 250)->nullable()->comment('分类模板')->after('name');
-            $table->string('tpl_content', 250)->nullable()->comment('内容模板')->after('name');
+            $table->string('keyword', 250)->nullable()->default('')->comment('关键词')->after('image');
+            $table->string('description', 250)->nullable()->default('')->comment('描述')->after('keyword');
+            $table->text('content')->nullable()->comment('简介')->after('description');
         });
     }
 
@@ -28,9 +28,7 @@ class UpdateArticleClassTable extends Migration
     public function down()
     {
         Schema::table('article_class', function (Blueprint $table) {
-            $table->dropColumn('image');
-            $table->dropColumn('tpl_class');
-            $table->dropColumn('tpl_content');
+            $table->dropColumn('content');
         });
     }
 }

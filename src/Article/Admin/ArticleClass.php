@@ -45,20 +45,19 @@ class ArticleClass extends ArticleExpend
         $form = new Form(new $this->model());
         $form->dialog(true);
         $form->action(route('admin.article.articleClass.save', ['model' => $this->modelId, 'id' => $id]));
-
         $form->cascader('上级分类', 'parent_id', function ($value) {
             return $this->model::scoped(['model_id' => $this->modelId])->orderBy('sort', 'desc')->orderBy('class_id', 'asc')->get(['class_id as id', 'parent_id as pid', 'name']);
         })->default($classId);
-
         $form->text('分类名称', 'name')->verify([
             'required',
         ], [
             'required' => '请填写分类名称',
         ]);
-
         $form->text('分类副名称', 'subname');
-
         $form->image('封面图', 'image');
+        $form->text('分类关键词', 'keyword');
+        $form->text('分类简介', 'description');
+        $form->textarea('分类简介', 'text');
         $form->text('分类模板', 'tpl_class');
         $form->text('内容模板', 'tpl_content');
 
