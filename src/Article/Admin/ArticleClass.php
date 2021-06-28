@@ -55,9 +55,9 @@ class ArticleClass extends ArticleExpend
         ]);
         $form->text('分类副名称', 'subname');
         $form->image('封面图', 'image');
+        $form->textarea('分类简介', 'content');
         $form->text('分类关键词', 'keyword');
-        $form->text('分类简介', 'description');
-        $form->textarea('分类简介', 'text');
+        $form->text('分类描述', 'description');
         $form->text('分类模板', 'tpl_class');
         $form->text('内容模板', 'tpl_content');
 
