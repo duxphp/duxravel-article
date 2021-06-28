@@ -168,6 +168,7 @@ class Blade
 
         return $data->map(function ($item) {
             $item->view = $item->views->pv + $item->virtual_view;
+            return $item;
         });
     }
 
