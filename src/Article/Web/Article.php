@@ -29,6 +29,7 @@ class Article extends Base
         if (!$classInfo) {
             app_error('栏目不存在', 404);
         }
+        $info->viewsInc();
         $this->assign('info', $info ?: collect());
         $this->assign('classInfo', $classInfo ?: collect());
         $tpl = $this->getParentValue($classInfo, 'tpl_content') ?: 'articleInfo';

@@ -86,10 +86,6 @@ class Article extends ArticleExpend
         $form->action(route('admin.article.article.save', ['model' => $this->modelId, 'id' => $id]));
 
         $info = $model->find($id);
-        // 访问量
-        if ($id) {
-            $info->viewsInc();
-        }
         $formId = app(\Modules\Article\Model\ArticleModel::class)->where('model_id', $this->modelId)->value('form_id');
 
         $form->card(function (Form $form) use ($formId, $info) {
