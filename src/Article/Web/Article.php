@@ -14,6 +14,7 @@ class Article extends Base
             app_error('栏目不存在', 404);
         }
 
+        $this->meta($classInfo['name'], $classInfo['keyword'], $classInfo['description']);
         $this->assign('classInfo', $classInfo ?: collect());
         $tpl = $this->getParentValue($classInfo, 'tpl_class') ?: 'articleList';
         return $this->view($tpl);
@@ -30,6 +31,7 @@ class Article extends Base
             app_error('栏目不存在', 404);
         }
         $info->viewsInc();
+        $this->meta($info['title'], $info['keyword'] ?: $classInfo['keyword'], $info['description'] ?: $classInfo['description']);
         $this->assign('info', $info ?: collect());
         $this->assign('classInfo', $classInfo ?: collect());
         $tpl = $this->getParentValue($classInfo, 'tpl_content') ?: 'articleInfo';
@@ -41,6 +43,7 @@ class Article extends Base
         $keyword = request()->get('keyword');
         $classId = request()->get('class');
         $classInfo = \Modules\Article\Model\ArticleClass::find($classId);
+        $this->meta($keyword . ($classInfo['name'] ? ' - ' . $classInfo['name'] : ''), $classInfo['keyword'] ?: $keyword, $classInfo['description']);
         $this->assign('keyword', $keyword);
         $this->assign('classInfo', $classInfo);
         return $this->view('articleSearch');
@@ -50,6 +53,7 @@ class Article extends Base
     {
         $classId = request()->get('class');
         $classInfo = \Modules\Article\Model\ArticleClass::find($classId);
+        $this->meta($tag . ($classInfo['name'] ? ' - ' . $classInfo['name'] : ''), $classInfo['keyword'] ?: $tag, $classInfo['description']);
         $this->assign('tag', $tag);
         $this->assign('classInfo', $classInfo);
         return $this->view('articleTags');

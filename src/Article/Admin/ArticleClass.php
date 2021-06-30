@@ -58,6 +58,10 @@ class ArticleClass extends ArticleExpend
         $form->textarea('分类简介', 'content');
         $form->text('分类关键词', 'keyword');
         $form->text('分类描述', 'description');
+        $url = route('admin.tools.url');
+        $form->text('跳转链接', 'url')->afterText("<a class='block cursor-pointer' href='javascript:;' data-js='dialog-open' data-type='ajax' data-url='$url' data-layout='false'>选择</a>");
+
+
         $form->text('分类模板', 'tpl_class');
         $form->text('内容模板', 'tpl_content');
 
