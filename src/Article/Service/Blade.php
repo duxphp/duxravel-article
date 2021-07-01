@@ -154,10 +154,11 @@ class Blade
             $data = $data->limit($params['limit'])->get();
         }
 
+
         if ($params['keyword']) {
             $keyword = preg_replace('!\s+!', ' ', trim($params['keyword']));
             $keywords = explode(' ', $keyword);
-            $data = $data->map(function ($item) use ($keywords) {
+            $data->getCollection()->map(function ($item) use ($keywords) {
                 foreach ($keywords as $vo) {
                     $item->title = str_replace($vo, '<strong>' . $vo . '</strong>', $item->title);
                     $item->description = str_replace($vo, '<strong>' . $vo . '</strong>', $item->description);
@@ -166,10 +167,12 @@ class Blade
             });
         }
 
-        return $data->map(function ($item) {
+        $data->getCollection()->map(function ($item) {
             $item->view = $item->views->pv + $item->virtual_view;
             return $item;
         });
+
+        return $data;
     }
 
     /**
