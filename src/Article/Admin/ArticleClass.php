@@ -62,8 +62,8 @@ class ArticleClass extends ArticleExpend
         $form->text('跳转链接', 'url')->afterText("<a class='block cursor-pointer' href='javascript:;' data-js='dialog-open' data-type='ajax' data-url='$url' data-layout='false'>选择</a>");
 
 
-        $form->text('分类模板', 'tpl_class');
-        $form->text('内容模板', 'tpl_content');
+        $form->text('分类模板', 'tpl_class')->afterText('.blade.php');
+        $form->text('内容模板', 'tpl_content')->afterText('.blade.php');
 
         $form->front(function ($data, $type, $model) {
             $model->model_id = $this->modelId;
