@@ -52,6 +52,8 @@ class Blade
         }
 
         if ($params['parent']) {
+            $modelId = ArticleClass::where('class_id', $params['parent'])->value('model_id');
+            $data = $data->scoped(['model_id' => $modelId]);
             return $data->ancestorsAndSelf($params['parent']);
         }
 
