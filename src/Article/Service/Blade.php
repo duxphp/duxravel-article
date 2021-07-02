@@ -79,7 +79,8 @@ class Blade
             'attr' => (int)$args['attr'],
             'keyword' => (string)$args['keyword'],
             'tag' => (string)$args['tag'],
-            'sort' => (array)$args['sort']
+            'sort' => (array)$args['sort'],
+            'formWhere' => (array)$args['formWhere'],
         ];
         $data = new \Modules\Article\Model\Article();
         $data = $data->with('class');
@@ -123,6 +124,17 @@ class Blade
                     $query->where((new ArticleClass())->getTable() . '.class_id', $params['class']);
                 }
             });
+        }
+
+        if ($params['formWhere'] && is_array($params['formWhere'])) {
+            $data = $data->with('form');
+            $data = $data->whereHas('form', static function ($query) use ($params) {
+                $formTable = (new \Duxravel\Core\Model\FormData())->getTable();
+                foreach ($params['formWhere'] as $key => $vo) {
+                    $query->where($formTable . '.' . $key, $vo);
+                }
+            });
+
         }
 
         if (isset($args['keyword'])) {
