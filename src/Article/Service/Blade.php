@@ -34,14 +34,18 @@ class Blade
         $data = new ArticleClass();
 
         if ($params['id']) {
-            $data = $data->where(['model_id' => $params['model']]);
+            if ($params['model']) {
+                $data = $data->where(['model_id' => $params['model']]);
+            }
             if (is_array($params['id'])) {
                 return $data->limit($params['limit'])->whereIn('class_id', $params['id'])->get();
             } else {
                 return $data->limit($params['limit'])->where('class_id', $params['id'])->get();
             }
         }
-        $data = $data->scoped(['model_id' => $params['model']]);
+        if ($params['model']) {
+            $data = $data->scoped(['model_id' => $params['model']]);
+        }
 
         if ($params['siblings']) {
             return $data->where('class_id', $params['siblings'])->first()->siblings()->withDepth()->get();
