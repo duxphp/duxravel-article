@@ -69,6 +69,13 @@ class ArticleClass extends ArticleExpend
             $model->model_id = $this->modelId;
             return $model;
         });
+        $form->script(static function () {
+            return <<<JS
+                window['selectUrl'] = function(url) {
+                    $('input[name="url"]').val(url)
+                }
+            JS;
+        });
         return $form;
     }
 
