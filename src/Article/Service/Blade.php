@@ -86,6 +86,9 @@ class Blade
         $data = $data->with('class');
         $data = $data->with('views');
 
+        $data = $data->where('status', 1);
+        $data = $data->where('release_time', '<=', time());
+
         if ($params['model']) {
             $data = $data->where('model_id', $params['model']);
         }
