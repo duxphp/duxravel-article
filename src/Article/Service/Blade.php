@@ -160,6 +160,9 @@ class Blade
                         $data = $data->orderByRaw(\DB::raw("FIELD(article_id, $ids) DESC"));
                     }
                 }
+                if ($key === 'time') {
+                    $data = $data->orderBy('release_time', $vo);
+                }
                 if ($key === 'sort') {
                     $data = $data->orderBy('sort', $vo);
                 }
