@@ -69,7 +69,7 @@ class Article extends ArticleExpend
             $column->link('恢复', 'admin.article.article.recovery', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
             $column->link('删除', 'admin.article.article.clear', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
         } else {
-            $column->link('预览', 'web.article.info', ['id' => 'article_id']);
+            $column->link('预览', 'web.article.info', ['id' => 'article_id'])->attr('target', '_blank');
             $column->link('流量', 'admin.system.visitorViews.info', ['type' => \Modules\Article\Model\Article::class, 'id' => 'article_id'])->type('dialog')->attr('data-size', 'medium');
             $column->link('编辑', 'admin.article.article.page', ['model' => $this->modelId, 'id' => 'article_id']);
             $column->link('删除', 'admin.article.article.del', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
