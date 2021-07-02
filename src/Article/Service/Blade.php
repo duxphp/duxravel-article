@@ -131,7 +131,7 @@ class Blade
             $data = $data->whereHas('form', static function ($query) use ($params) {
                 $formTable = (new \Duxravel\Core\Model\FormData())->getTable();
                 foreach ($params['formWhere'] as $key => $vo) {
-                    $query->where($formTable . '.' . $key, $vo);
+                    $query->where($formTable . '.data->' . $key, $vo);
                 }
             });
 
