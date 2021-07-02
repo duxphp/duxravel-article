@@ -150,17 +150,15 @@ class Blade
 
         if ($params['sort']) {
             $sorts = $params['sort'];
-            if (!$params[0]) {
+            if ($params[0]) {
                 $sorts = [$params['sort'][0] => $params['sort'][1]];
             }
             foreach ($sorts as $key => $vo) {
                 if ($key === 'attr') {
-                    $data = $data->with('attribute');
-                    $data = $data->whereHas('attribute', static function ($query) use ($vo) {
-                        $table = (new \Modules\Article\Model\ArticleAttribute())->getTable();
-                        $query->selectRaw("if($table.attr_id=$vo) as attr_order");
-                    });
-                    $data = $data->orderBy('attr_order', 'desc');
+                    $ids = \DB::table('article_attribute_has')->where('attr_id', $vo)->pluck('article_id')->join(',');
+                    if ($ids) {
+                        $data = $data->orderByRaw(\DB::raw("FIELD(article_id, $ids) DESC"));
+                    }
                 }
                 if ($key === 'sort') {
                     $data = $data->orderBy('sort', $vo);
