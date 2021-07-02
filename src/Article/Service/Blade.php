@@ -117,7 +117,8 @@ class Blade
         }
 
         if ($params['sub']) {
-            $ids = ArticleClass::find($params['sub'])->descendantsAndSelf($params['sub'])->pluck('class_id');
+            $classInfo = ArticleClass::find($params['sub']);
+            $ids = $classInfo->scoped(['model_id' => $classInfo['model_id']])->descendantsAndSelf($params['sub'])->pluck('class_id');
             $data->whereHas('class', function ($query) use ($ids) {
                 $query->whereIn((new ArticleClass())->getTable() . '.class_id', $ids);
             });
