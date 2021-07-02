@@ -73,7 +73,7 @@ class Blade
             'class' => $args['class'] ?: 0,
             'limit' => (int)$args['limit'] ?: 10,
             'offset' => (int)$args['offset'] ?: 0,
-            'model' => (string)$args['model'] ?: 1,
+            'model' => (string)$args['model'] ?: 0,
             'image' => (bool)$args['image'],
             'page' => (bool)$args['page'],
             'attr' => (int)$args['attr'],
@@ -151,6 +151,17 @@ class Blade
                 $sorts = [$params['sort'][0] => $params['sort'][1]];
             }
             foreach ($sorts as $key => $vo) {
+                if ($key === 'attr') {
+                    $data = $data->with('attribute');
+                    $data = $data->whereHas('attribute', static function ($query) use ($vo) {
+                        $table = (new \Modules\Article\Model\ArticleAttribute())->getTable();
+                        $query->selectRaw("if($table.attr_id=$vo) as attr_order");
+                    });
+                    $data = $data->orderBy('attr_order', 'desc');
+                }
+                if ($key === 'sort') {
+                    $data = $data->orderBy('sort', $vo);
+                }
                 if ($key === 'view') {
                     $data = $data->orderByWith('views', 'pv', $vo);
                 }

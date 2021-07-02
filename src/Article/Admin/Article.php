@@ -62,6 +62,8 @@ class Article extends ArticleExpend
         $table->column('访问/访客', 'views->pv')->color('muted')->desc('views->uv');
         $table->column('流量')->width('150')->chart();
 
+        $table->column('状态', 'status')->toggle('status', 'admin.article.article.status', ['model' => $this->modelId, 'id' => 'article_id'])->width(100);
+
         $column = $table->column('操作')->width('180')->align('right');
         if ($type == 2) {
             $column->link('恢复', 'admin.article.article.recovery', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
@@ -113,6 +115,8 @@ class Article extends ArticleExpend
             $form->editor('内容', 'content');
             $form->select('关键词', 'keyword')->tags();
             $form->textarea('描述', 'description');
+            $form->textarea('发布时间', 'release_time')->default(time());
+            $form->textarea('排序', 'sort');
             $form->radio('状态', 'status', [
                 1 => '发布',
                 0 => '草稿箱',
