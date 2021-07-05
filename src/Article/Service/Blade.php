@@ -25,7 +25,7 @@ class Blade
     {
         $params = [
             'id' => $args['id'] ?: 0,
-            'limit' => $args['limit'] ?: 10,
+            'limit' => $args['limit'] ?: 0,
             'model' => (string)$args['model'] ?: 0,
             'sub' => (int)$args['sub'],
             'parent' => (int)$args['parent'],
