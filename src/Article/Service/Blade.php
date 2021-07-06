@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Kalnoy\Nestedset\QueryBuilder;
 use Modules\Article\Model\Article;
 use Modules\Article\Model\ArticleClass;
-use Modules\Tools\Model\ToolsTagsHas;
 
 /**
  * 标签扩展
@@ -220,7 +219,7 @@ class Blade
             'limit' => $args['limit'] ?: 10,
             'sort' => (array)$args['sort']
         ];
-        $data = new ToolsTagsHas();
+        $data = new \Conner\Tagging\Model\Tagged();
         $data = $data->where('taggable_type', Article::class);
         $data = $data->with('tag');
         $data = $data->limit($params['limit']);
