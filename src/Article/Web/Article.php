@@ -65,7 +65,7 @@ class Article extends Base
 
     private function getParentValue($classInfo, $name)
     {
-        $list = $classInfo->ancestorsAndSelf($classInfo->class_id);
+        $list = $classInfo->scoped(['model_id' => $classInfo->model_id])->ancestorsAndSelf($classInfo->class_id);
         $modelInfo = \Modules\Article\Model\ArticleModel::find($classInfo->model_id);
         $value = '';
         foreach ($list as $item) {

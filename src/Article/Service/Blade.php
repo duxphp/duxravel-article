@@ -24,7 +24,7 @@ class Blade
     {
         $params = [
             'id' => $args['id'] ?: 0,
-            'limit' => $args['limit'] ?: 10,
+            'limit' => $args['limit'] ?: null,
             'model' => (string)$args['model'] ?: 0,
             'sub' => (int)$args['sub'],
             'parent' => (int)$args['parent'],
@@ -56,12 +56,10 @@ class Blade
             return $data->ancestorsAndSelf($params['parent']);
         }
 
-        $data = $data->limit($params['limit']);
-
         if ($params['sub']) {
-            $data = $data->where('class_id', $params['sub'])->first()->descendants()->get()->toTree();
+            $data = $data->where('class_id', $params['sub'])->first()->descendants()->get()->toTree()->take($params['limit']);
         } else {
-            $data = $data->get()->toTree();
+            $data = $data->get()->toTree()->take($params['limit']);
         }
         return $data;
     }

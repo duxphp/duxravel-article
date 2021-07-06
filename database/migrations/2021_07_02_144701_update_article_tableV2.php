@@ -14,7 +14,7 @@ class UpdateArticleTableV2 extends Migration
     public function up()
     {
         Schema::table('article', function (Blueprint $table) {
-            $table->integer('source', 250)->nullable()->comment('文章来源')->after('auth');
+            $table->string('source', 250)->nullable()->comment('文章来源')->after('auth');
             $table->integer('sort')->nullable()->default(0)->comment('自定义顺序')->after('status');
             $table->integer('release_time')->nullable()->default(0)->comment('自定义发布时间')->after('sort');
         });
