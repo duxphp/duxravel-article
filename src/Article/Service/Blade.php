@@ -57,12 +57,10 @@ class Blade
             return $data->ancestorsAndSelf($params['parent']);
         }
 
-        $data = $data->limit($params['limit']);
-
         if ($params['sub']) {
-            $data = $data->where('class_id', $params['sub'])->first()->descendants()->get()->toTree();
+            $data = $data->where('class_id', $params['sub'])->first()->descendants()->get()->toTree()->take($params['limit']);
         } else {
-            $data = $data->get()->toTree();
+            $data = $data->get()->toTree()->take($params['limit']);
         }
         return $data;
     }
