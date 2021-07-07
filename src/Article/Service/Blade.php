@@ -134,6 +134,7 @@ class Blade
             });
         }
 
+
         if ($params['formWhere'] && is_array($params['formWhere'])) {
             $data = $data->with('form');
             $data = $data->whereHas('form', static function ($query) use ($params) {
@@ -160,9 +161,29 @@ class Blade
             }
             foreach ($sorts as $key => $vo) {
                 if ($key === 'attr') {
-                    $ids = \DB::table('article_attribute_has')->where('attr_id', $vo)->pluck('article_id')->join(',');
+
+                    $cloneData = clone $data;
+                    $cloneData = $cloneData->with('attribute');
+                    $cloneData->whereHas('attribute', function ($query) use ($vo) {
+                        $query->where((new ArticleAttribute())->getTable() .'.attr_id', $vo);
+                    });
+                    foreach ($sorts as $v) {
+                        if ($v === 'time') {
+                            $cloneData = $cloneData->orderBy('release_time', $v);
+                        }
+                        if ($v === 'sort') {
+                            $cloneData = $cloneData->orderBy('sort', $v);
+                        }
+                        if ($v === 'view') {
+                            $cloneData = $cloneData->orderByWith('views', 'pv', $v);
+                        }
+                        if ($v === 'id') {
+                            $cloneData = $cloneData->orderBy('article_id', $v);
+                        }
+                    }
+                    $ids = $cloneData->pluck('article_id')->join(',');
                     if ($ids) {
-                        $data = $data->orderByRaw(\DB::raw("FIELD(article_id, $ids) DESC"));
+                        $data = $data->orderByRaw(\DB::raw("`article_id` in ($ids) desc"));
                     }
                 }
                 if ($key === 'time') {
