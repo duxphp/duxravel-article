@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Kalnoy\Nestedset\QueryBuilder;
 use Modules\Article\Model\Article;
+use Modules\Article\Model\ArticleAttribute;
 use Modules\Article\Model\ArticleClass;
 
 /**
