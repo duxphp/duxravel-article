@@ -43,26 +43,35 @@ class Blade
                 return $data->limit($params['limit'])->where('class_id', $params['id'])->get();
             }
         }
+
         if ($params['model']) {
             $data = $data->scoped(['model_id' => $params['model']]);
         }
 
+        if ($params['sub']) {
+            $class = $data->find($params['sub']);
+
+        }
         if ($params['siblings']) {
-            return $data->where('class_id', $params['siblings'])->first()->siblings()->withDepth()->get();
+            $class = $data->find($params['siblings']);
+        }
+        if ($params['parent']) {
+            $class = $data->find($params['parent']);
+        }
+
+        if ($params['siblings']) {
+            return $data->scoped(['model_id' => $class->model_id])->descendantsOf($class->parent_id);
         }
 
         if ($params['parent']) {
-            $modelId = ArticleClass::where('class_id', $params['parent'])->value('model_id');
-            $data = $data->scoped(['model_id' => $modelId]);
-            return $data->ancestorsAndSelf($params['parent']);
+            return $data->scoped(['model_id' => $class->model_id])->ancestorsAndSelf($class->class_id);
         }
 
         if ($params['sub']) {
-            $data = $data->where('class_id', $params['sub'])->first()->descendants()->get()->toTree()->take($params['limit']);
-        } else {
-            $data = $data->get()->toTree()->take($params['limit']);
+            return $data->scoped(['model_id' => $class->model_id])->descendantsOf($class->class_id);
         }
-        return $data;
+
+        return $data->get()->toTree()->take($params['limit']);
     }
 
     /**
@@ -134,7 +143,6 @@ class Blade
             });
         }
 
-
         if ($params['formWhere'] && is_array($params['formWhere'])) {
             $data = $data->with('form');
             $data = $data->whereHas('form', static function ($query) use ($params) {
@@ -165,7 +173,7 @@ class Blade
                     $cloneData = clone $data;
                     $cloneData = $cloneData->with('attribute');
                     $cloneData->whereHas('attribute', function ($query) use ($vo) {
-                        $query->where((new ArticleAttribute())->getTable() .'.attr_id', $vo);
+                        $query->where((new ArticleAttribute())->getTable() . '.attr_id', $vo);
                     });
                     foreach ($sorts as $v) {
                         if ($v === 'time') {
