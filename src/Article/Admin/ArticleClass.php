@@ -18,7 +18,7 @@ class ArticleClass extends ArticleExpend
         $table = new Table(new $this->model());
         $table->title('分类管理');
         $table->model()->scoped(['model_id' => $this->modelId])->defaultOrder();
-        $table->tree('parent_id', route('admin.article.articleClass.sortable'));
+        $table->tree('parent_id', route('admin.article.articleClass.sortable', ['model' => $this->modelId]));
 
         $table->filter('分类', 'name', function ($query, $value) {
             $query->where('name', 'like', '%' . $value . '%');
@@ -28,7 +28,7 @@ class ArticleClass extends ArticleExpend
 
         $table->column('分类', 'name', function ($value, $row) {
             return $value . '<span class="text-gray-500 ml-2">[' . $row['class_id'] . ']<span>';
-        });
+        })->drag();
 
         $column = $table->column('操作')->width(150);
         $column->link('新增', 'admin.article.articleClass.page', ['model' => $this->modelId, 'class_id' => 'class_id'])->type('dialog');
