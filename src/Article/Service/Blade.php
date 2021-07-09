@@ -43,8 +43,6 @@ class Blade
                 return $data->limit($params['limit'])->where('class_id', $params['id'])->get();
             }
         }
-        
-        $data = $data->defaultOrder();
 
         if ($params['model']) {
             $data = $data->scoped(['model_id' => $params['model']]);
@@ -52,7 +50,6 @@ class Blade
 
         if ($params['sub']) {
             $class = $data->find($params['sub']);
-
         }
         if ($params['siblings']) {
             $class = $data->find($params['siblings']);
@@ -61,19 +58,23 @@ class Blade
             $class = $data->find($params['parent']);
         }
 
+        if (!$params['model'] && isset($class)) {
+            $data = $data->scoped(['model_id' => $class->model_id]);
+        }
+
         if ($params['siblings']) {
-            return $data->scoped(['model_id' => $class->model_id])->descendantsOf($class->parent_id);
+            return $data->defaultOrder()->descendantsOf($class->parent_id)->toTree();
         }
 
         if ($params['parent']) {
-            return $data->scoped(['model_id' => $class->model_id])->ancestorsAndSelf($class->class_id);
+            return $data->defaultOrder()->ancestorsAndSelf($class->class_id);
         }
 
         if ($params['sub']) {
-            return $data->scoped(['model_id' => $class->model_id])->descendantsOf($class->class_id);
+            return $data->defaultOrder()->descendantsOf($class->class_id)->toTree();
         }
 
-        return $data->get()->toTree()->take($params['limit']);
+        return $data->defaultOrder()->get()->toTree()->take($params['limit']);
     }
 
     /**

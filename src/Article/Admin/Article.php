@@ -75,7 +75,7 @@ class Article extends ArticleExpend
             $column->link('删除', 'admin.article.article.del', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
         }
 
-        $table->side((new Widget\TreeList('分类选择', \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->get()->toTree(), 'class_id', 'admin.article.article', ['model' => $this->modelId, 'class_id' => 'class_id']))->render());
+        $table->side((new Widget\TreeList('分类选择', \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get()->toTree(), 'class_id', 'admin.article.article', ['model' => $this->modelId, 'class_id' => 'class_id']))->render());
 
         return $table;
     }
