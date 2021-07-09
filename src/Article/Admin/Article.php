@@ -50,7 +50,7 @@ class Article extends ArticleExpend
                 $query->whereIn((new \Modules\Article\Model\ArticleClass())->getTable() . '.class_id', $classIds);
             });
         })->cascader(function ($value) {
-            return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->orderBy('sort', 'desc')->orderBy('class_id', 'asc')->get(['class_id as id', 'parent_id as pid', 'name']);
+            return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
         })->quick();
         // 设置列表
         $table->column('#', 'article_id')->width(80);
@@ -93,7 +93,7 @@ class Article extends ArticleExpend
 
         $form->card(function (Form $form) use ($formId, $info) {
             $form->cascader('分类', 'class_id', function () {
-                return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->orderBy('sort', 'desc')->orderBy('class_id', 'asc')->get(['class_id as id', 'parent_id as pid', 'name']);
+                return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
             }, 'class')->must()->multi();
             $form->text('标题', 'title');
             $form->text('副标题', 'subtitle');

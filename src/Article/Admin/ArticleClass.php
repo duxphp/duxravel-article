@@ -9,15 +9,16 @@ use Duxravel\Core\UI\Table;
 class ArticleClass extends ArticleExpend
 {
 
-    public string $model = \Modules\Article\Model\ArticleClass::class;
+    use \Duxravel\Core\Traits\TableSortable;
 
+    public string $model = \Modules\Article\Model\ArticleClass::class;
 
     protected function table(): Table
     {
         $table = new Table(new $this->model());
         $table->title('分类管理');
-        $table->model()->scoped(['model_id' => $this->modelId])->orderBy('sort', 'desc')->orderBy('model_id', 'asc');
-        $table->tree();
+        $table->model()->scoped(['model_id' => $this->modelId])->defaultOrder();
+        $table->tree('parent_id', route('admin.article.articleClass.sortable'));
 
         $table->filter('分类', 'name', function ($query, $value) {
             $query->where('name', 'like', '%' . $value . '%');
@@ -28,8 +29,6 @@ class ArticleClass extends ArticleExpend
         $table->column('分类', 'name', function ($value, $row) {
             return $value . '<span class="text-gray-500 ml-2">[' . $row['class_id'] . ']<span>';
         });
-
-        $table->column('顺序', 'sort')->width(150)->input('sort', ['admin.article.articleClass.status', ['model' => $this->modelId]], ['id' => 'class_id']);
 
         $column = $table->column('操作')->width(150);
         $column->link('新增', 'admin.article.articleClass.page', ['model' => $this->modelId, 'class_id' => 'class_id'])->type('dialog');
@@ -46,7 +45,7 @@ class ArticleClass extends ArticleExpend
         $form->dialog(true);
         $form->action(route('admin.article.articleClass.save', ['model' => $this->modelId, 'id' => $id]));
         $form->cascader('上级分类', 'parent_id', function ($value) {
-            return $this->model::scoped(['model_id' => $this->modelId])->orderBy('sort', 'desc')->orderBy('class_id', 'asc')->get(['class_id as id', 'parent_id as pid', 'name']);
+            return $this->model::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
         })->default($classId);
         $form->text('分类名称', 'name')->verify([
             'required',

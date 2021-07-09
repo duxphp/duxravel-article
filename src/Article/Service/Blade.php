@@ -43,6 +43,8 @@ class Blade
                 return $data->limit($params['limit'])->where('class_id', $params['id'])->get();
             }
         }
+        
+        $data = $data->defaultOrder();
 
         if ($params['model']) {
             $data = $data->scoped(['model_id' => $params['model']]);

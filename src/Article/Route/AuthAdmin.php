@@ -11,7 +11,7 @@ Route::group([
     Route::group([
         'auth_group' => '文章分类'
     ], function () {
-        Route::manage(\Modules\Article\Admin\ArticleClass::class)->prefix('articleClass-{model}')->only(['index', 'page', 'save', 'del', 'status'])->make();
+        Route::manage(\Modules\Article\Admin\ArticleClass::class)->prefix('articleClass-{model}')->only(['index', 'page', 'save', 'del', 'status', 'sort'])->make();
     });
 
     Route::group([
