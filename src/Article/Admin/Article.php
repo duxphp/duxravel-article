@@ -74,6 +74,9 @@ class Article extends ArticleExpend
             $column->link('编辑', 'admin.article.article.page', ['model' => $this->modelId, 'id' => 'article_id']);
             $column->link('删除', 'admin.article.article.del', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
         }
+
+        $table->side((new Widget\TreeList('分类选择', \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->get()->toTree(), 'class_id', 'admin.article.article', ['model' => $this->modelId, 'class_id' => 'class_id']))->render());
+
         return $table;
     }
 
@@ -94,7 +97,7 @@ class Article extends ArticleExpend
         $form->card(function (Form $form) use ($formId, $info) {
             $form->cascader('分类', 'class_id', function () {
                 return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
-            }, 'class')->must()->multi();
+            }, 'class')->must()->multi()->default(request()->get('class_id'));
             $form->text('标题', 'title');
             $form->text('副标题', 'subtitle');
 
