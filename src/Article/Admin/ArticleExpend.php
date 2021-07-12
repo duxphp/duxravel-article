@@ -54,7 +54,7 @@ class ArticleExpend extends \Modules\System\Admin\Expend
         return parent::clear($id);
     }
 
-    public function data($modelId = 0,)
+    public function data($modelId = 0)
     {
         $this->modelId = $modelId;
         return parent::data();
