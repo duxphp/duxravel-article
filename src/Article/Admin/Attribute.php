@@ -23,7 +23,7 @@ class Attribute extends \Modules\System\Admin\Expend
         $table->column('名称', 'name');
         $column = $table->column('操作')->width(150);
         $column->link('编辑', 'admin.article.attribute.page', ['id' => 'attr_id'])->type('dialog');
-        $column->link('删除', 'admin.article.attribute.del', ['id' => 'attr_id'])->type('ajax')->data(['type' => 'post']);
+        $column->link('删除', 'admin.article.attribute.del', ['id' => 'attr_id'])->type('ajax', ['method' => 'post']);
         return $table;
     }
 

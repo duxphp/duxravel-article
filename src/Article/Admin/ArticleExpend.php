@@ -12,6 +12,12 @@ class ArticleExpend extends \Modules\System\Admin\Expend
         return parent::index();
     }
 
+    public function ajax($modelId = 0)
+    {
+        $this->modelId = $modelId;
+        return parent::ajax();
+    }
+
     public function add($modelId = 0)
     {
         $this->modelId = $modelId;

@@ -3,8 +3,12 @@
 namespace Modules\Article\Admin;
 
 use Duxravel\Core\UI\Form;
+use Duxravel\Core\UI\Node;
 use Duxravel\Core\UI\Table;
 use Duxravel\Core\UI\Widget;
+use Duxravel\Core\UI\Widget\Icon;
+use Duxravel\Core\UI\Widget\Link;
+use Duxravel\Core\UI\Widget\TreeList;
 use Duxravel\Core\Util\Menu;
 
 class Article extends ArticleExpend
@@ -20,21 +24,24 @@ class Article extends ArticleExpend
     {
         $type = request()->get('type');
         $table = new Table(new $this->model());
+        $table->tableMode('list');
         $table->title('内容管理');
         $table->model()->where('model_id', $this->modelId);
         $table->model()->with('class');
 
+
+        $table->action()->button('添加', 'admin.article.article.page', ['model' => $this->modelId]);
+
         $table->filterType('已发布', function ($model) {
             $model->where('status', 1);
-        }, route('admin.article.article', ['model' => $this->modelId]))->icon(new Widget\Icon('annotation'));
+        })->icon('annotation');
         $table->filterType('草稿箱', function ($model) {
             $model->where('status', 0);
-        }, route('admin.article.article', ['model' => $this->modelId, 'type' => 1]))->icon(new Widget\Icon('archive'));
+        })->icon('archive');
         $table->filterType('回收站', function ($model) {
             $model->onlyTrashed();
-        }, route('admin.article.article', ['model' => $this->modelId, 'type' => 2]))->icon(new Widget\Icon('trash'));
+        })->icon('trash');
 
-        $table->action()->button('添加', 'admin.article.article.page', ['model' => $this->modelId])->icon('plus');
         // 排序
         $table->model()->orderBy('article_id', 'desc');
         // 设置筛选
@@ -44,38 +51,72 @@ class Article extends ArticleExpend
                 [$value]
             );
         })->text('请输入文章标题')->quick();
-        $table->filter('分类', 'class_id', function ($query, $value) {
-            $classIds = (new \Modules\Article\Model\ArticleClass())->find($value)->descendantsAndSelf($value)->pluck('class_id');
-            $query->whereHas('class', function ($query) use ($classIds) {
-                $query->whereIn((new \Modules\Article\Model\ArticleClass())->getTable() . '.class_id', $classIds);
-            });
-        })->cascader(function ($value) {
-            return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
-        })->quick();
-        // 设置列表
+
         $table->column('#', 'article_id')->width(80);
+
+
         $table->column('标题', 'title')->image('image', function ($value) {
             return $value ?: '无';
         })->desc('class', function ($value) {
             return $value->pluck('name')->toArray();
         });
         $table->column('访问/访客', 'views->pv')->color('muted')->desc('views->uv');
-        $table->column('流量')->width('150')->chart();
+        //$table->column('流量')->width('150')->chart();
 
         $table->column('状态', 'status')->toggle('status', 'admin.article.article.status', ['model' => $this->modelId, 'id' => 'article_id'])->width(100);
 
-        $column = $table->column('操作')->width('180')->align('right');
+        $column = $table->column('操作')->width('180')->align('right')->width(200)->fixed();
         if ($type == 2) {
-            $column->link('恢复', 'admin.article.article.recovery', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
-            $column->link('删除', 'admin.article.article.clear', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
+            $column->link('恢复', 'admin.article.article.recovery', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax', ['method' => 'post']);
+            $column->link('删除', 'admin.article.article.clear', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax', ['method' => 'post']);
         } else {
             $column->link('预览', 'web.article.info', ['id' => 'article_id'])->attr('target', '_blank');
-            $column->link('流量', 'admin.system.visitorViews.info', ['type' => \Modules\Article\Model\Article::class, 'id' => 'article_id'])->type('dialog')->attr('data-size', 'medium');
+            $column->link('流量', 'admin.system.visitorViews.info', ['type' => \Modules\Article\Model\Article::class, 'id' => 'article_id'])->type('dialog');
             $column->link('编辑', 'admin.article.article.page', ['model' => $this->modelId, 'id' => 'article_id']);
-            $column->link('删除', 'admin.article.article.del', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax')->data(['type' => 'post']);
+            $column->link('删除', 'admin.article.article.del', ['model' => $this->modelId, 'id' => 'article_id'])->type('ajax', ['method' => 'post']);
         }
 
-        $table->side((new Widget\TreeList('分类选择', \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get()->toTree(), 'class_id', 'admin.article.article', ['model' => $this->modelId, 'class_id' => 'class_id']))->render());
+        $table->filter('分类id', 'class_id', function ($query, $value) {
+            $id = $value[0];
+            $classIds = (new \Modules\Article\Model\ArticleClass())->find($id)->descendantsAndSelf($id)->pluck('class_id');
+            $query->whereHas('class', function ($query) use ($classIds) {
+                $query->whereIn((new \Modules\Article\Model\ArticleClass())->getTable() . '.class_id', $classIds);
+            });
+        }, []);
+
+        $table->side(function () {
+            return (new Node())->div(function ($node) {
+                $node->div((new Link('添加节点', 'admin.article.articleClass.page', ['model' => $this->modelId]))->button('info', 'medium', true)->icon('plus')->attr('black', true)->type('dialog')->getRender())->class('p-4');
+
+                $node->div(
+                    (new TreeList(request()->get('class_id'), 'class_id'))
+                        ->search(true)
+                        ->url(route('admin.article.articleClass.ajax', ['model' => $this->modelId]))
+                        ->sortUrl(route('admin.article.articleClass.sortable', ['model' => $this->modelId]))
+                        ->menu([
+                            'add' => [
+                                'name' => '新增',
+                                'route' => 'admin.article.articleClass.page',
+                                'params' => ['model' => $this->modelId, 'class_id' => 'class_id'],
+                                'type' => 'dialog',
+                            ],
+                            'edit' => [
+                                'name' => '编辑',
+                                'route' => 'admin.article.articleClass.page',
+                                'params' => ['model' => $this->modelId, 'id' => 'class_id'],
+                                'type' => 'dialog',
+                            ],
+                            'del' => [
+                                'name' => '删除',
+                                'route' => 'admin.article.articleClass.del',
+                                'params' => ['model' => $this->modelId, 'id' => 'class_id'],
+                                'type' => 'ajax',
+                            ],
+                        ])
+                        ->render()
+                )->class('mt-2 flex-none');
+            })->class('lg:w-52')->render();
+        });
 
         return $table;
     }

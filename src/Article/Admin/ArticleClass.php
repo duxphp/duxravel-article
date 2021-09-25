@@ -5,6 +5,7 @@ namespace Modules\Article\Admin;
 use Duxravel\Core\Util\Tree;
 use Duxravel\Core\UI\Form;
 use Duxravel\Core\UI\Table;
+use Modules\Tools\UI\UrlSelect;
 
 class ArticleClass extends ArticleExpend
 {
@@ -18,22 +19,19 @@ class ArticleClass extends ArticleExpend
         $table = new Table(new $this->model());
         $table->title('分类管理');
         $table->model()->scoped(['model_id' => $this->modelId])->defaultOrder();
-        $table->tree('parent_id', route('admin.article.articleClass.sortable', ['model' => $this->modelId]));
 
-        $table->filter('分类', 'name', function ($query, $value) {
-            $query->where('name', 'like', '%' . $value . '%');
-        })->text('请输入分类名称')->quick();
+        $table->sortable(true);
+        $table->map([
+            'key' => 'tree_id',
+            'label' => 'name'
+        ]);
 
-        $table->action()->button('添加', 'admin.article.articleClass.page', ['model' => $this->modelId])->type('dialog');
-
-        $table->column('分类', 'name', function ($value, $row) {
-            return $value . '<span class="text-gray-500 ml-2">[' . $row['class_id'] . ']<span>';
-        })->drag();
-
+        $table->column('名称', 'name');
         $column = $table->column('操作')->width(150);
-        $column->link('新增', 'admin.article.articleClass.page', ['model' => $this->modelId, 'class_id' => 'class_id'])->type('dialog');
-        $column->link('编辑', 'admin.article.articleClass.page', ['model' => $this->modelId, 'id' => 'class_id'])->type('dialog');
-        $column->link('删除', 'admin.article.articleClass.del', ['model' => $this->modelId, 'id' => 'class_id'])->type('ajax')->data(['type' => 'post']);
+
+        $column->link('新增', 'admin.article.articleClass.page', ['model' => $this->modelId, 'class_id' => 'class_id']);
+        $column->link('编辑', 'admin.article.articleClass.page', ['model' => $this->modelId, 'id' => 'class_id']);
+        $column->link('删除', 'admin.article.articleClass.del', ['model' => $this->modelId, 'id' => 'class_id']);
 
         return $table;
     }
@@ -46,7 +44,7 @@ class ArticleClass extends ArticleExpend
         $form->action(route('admin.article.articleClass.save', ['model' => $this->modelId, 'id' => $id]));
         $form->cascader('上级分类', 'parent_id', function ($value) {
             return $this->model::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
-        })->default($classId);
+        })->default($classId)->leaf(false);
         $form->text('分类名称', 'name')->verify([
             'required',
         ], [
@@ -57,9 +55,10 @@ class ArticleClass extends ArticleExpend
         $form->textarea('分类简介', 'content');
         $form->text('分类关键词', 'keyword');
         $form->text('分类描述', 'description');
-        $url = route('admin.tools.url');
-        $form->text('跳转链接', 'url')->afterText("<a class='block cursor-pointer' href='javascript:;' data-js='dialog-open' data-type='ajax' data-url='$url' data-layout='false'>选择</a>");
+        $url = route('admin.tools.url.data');
+        $form->extend('urlSelect', UrlSelect::class);
 
+        $form->urlSelect('跳转链接', 'url', $url);
 
         $form->text('分类模板', 'tpl_class')->afterText('.blade.php');
         $form->text('内容模板', 'tpl_content')->afterText('.blade.php');

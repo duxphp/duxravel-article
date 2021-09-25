@@ -17,20 +17,9 @@ class Menu
 
         $menuList = $model->map(function ($item) {
             return [
-                    'name'  => $item['name'],
-                    'order' => 1,
-                    'menu'  => [
-                        [
-                            'name' => '内容管理',
-                            'url' => 'admin.article.article',
-                            'params' => ['model' => $item['model_id']]
-                        ],
-                        [
-                            'name' => '分类管理',
-                            'url' => 'admin.article.articleClass',
-                            'params' => ['model' => $item['model_id']]
-                        ],
-                    ]
+                'name' => $item['name'] . '管理',
+                'url' => 'admin.article.article',
+                'params' => ['model' => $item['model_id']]
             ];
         })->toArray();
 
@@ -42,20 +31,24 @@ class Menu
 </svg>',
                 'order' => 10,
                 'menu'  => [
-                    ...$menuList,
                     [
-                        'name'  => '管理',
+                        'name'  => '内容管理',
                         'order' => 1,
+                        'menu' => $menuList
+                    ],
+                    [
+                        'name'  => '内容设置',
+                        'order' => 100,
                         'menu'  => [
                             [
                                 'name'  => '模型管理',
                                 'url'   => 'admin.article.articleModel',
                             ],
-    [
-        'name'  => '内容属性',
-        'url'   => 'admin.article.attribute',
-    ],
-    // Generate Menu Make
+                            [
+                                'name'  => '内容属性',
+                                'url'   => 'admin.article.attribute',
+                            ],
+                            // Generate Menu Make
                         ]
                     ],
                 ],
