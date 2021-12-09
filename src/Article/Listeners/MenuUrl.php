@@ -1,17 +1,22 @@
 <?php
 
-namespace Modules\Article\Service;
+namespace Modules\Article\Listeners;
 
+use Duxravel\Core\Util\Tree;
 use Modules\Article\Model\Article;
 use Modules\Article\Model\ArticleClass;
-use Duxravel\Core\Util\Tree;
 
 /**
- * 类型接口
+ * 数据安装接口
  */
-class Type
+class MenuUrl
 {
-    public function getMenuUrl(): array
+
+    /**
+     * @param $event
+     * @return array[]
+     */
+    public function handle($event)
     {
         return [
             [
@@ -19,11 +24,11 @@ class Type
                 'model' => ArticleClass::class,
                 'maps' => [
                     'name' => 'name',
-                    'webUrl' => static function($item) {
+                    'webUrl' => static function ($item) {
                         return route('web.article.list', ['id' => $item['class_id']], false);
                     }
                 ],
-                'callback' => static function($data) {
+                'callback' => static function ($data) {
                     $data = collect(Tree::arr2table($data, 'class_id', 'parent_id'));
                     return $data->map(function ($items) {
                         $items['name'] = $items['spl'] . $items['name'];
@@ -37,31 +42,11 @@ class Type
                 'model' => Article::class,
                 'maps' => [
                     'name' => 'title',
-                    'webUrl' => static function($item) {
+                    'webUrl' => static function ($item) {
                         return route('web.article.info', ['id' => $item['article_id']], false);
                     }
                 ]
             ]
         ];
     }
-
-    public function getQuickSearch(): array
-    {
-        $data = [];
-        $modelList = \Modules\Article\Model\ArticleModel::all();
-        foreach ($modelList as $vo) {
-            $data[] = [
-                'name' => $vo->name,
-                'url' => route("admin.article.article.data", ['model' => $vo->model_id]),
-                'map' => [
-                    'title' => 'title',
-                    'image' => 'image',
-                    'desc' => 'desc',
-                    'url' => 'manage_url'
-                ]
-            ];
-        }
-        return $data;
-    }
 }
-
