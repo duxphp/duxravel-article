@@ -48,10 +48,9 @@ class ArticleClass extends ArticleExpend
         $form->textarea('分类简介', 'content');
         $form->text('分类关键词', 'keyword');
         $form->text('分类描述', 'description');
-        $url = route('admin.tools.url.data');
-        $form->extend('urlSelect', UrlSelect::class);
 
-        $form->urlSelect('跳转链接', 'url', $url);
+        $form->extend('urlSelect', UrlSelect::class);
+        $form->urlSelect('跳转链接', 'url', route('admin.tools.url.data'));
 
         $form->text('分类模板', 'tpl_class')->afterText('.blade.php');
         $form->text('内容模板', 'tpl_content')->afterText('.blade.php');
