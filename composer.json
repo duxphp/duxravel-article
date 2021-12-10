@@ -45,7 +45,8 @@
         "src/Article/Menu/Admin.php"
       ],
       "listener":[
-        "Modules\\Article\\Listeners\\InstallSeed"
+        "Modules\\Article\\Listeners\\InstallSeed",
+        "Modules\\Article\\Listeners\\MenuUrl"
       ]
     }
   },

@@ -19,20 +19,11 @@ class ArticleClass extends ArticleExpend
         $table = new Table(new $this->model());
         $table->title('分类管理');
         $table->model()->scoped(['model_id' => $this->modelId])->defaultOrder();
-
-        $table->sortable(true);
+        $table->tree();
         $table->map([
             'key' => 'tree_id',
-            'label' => 'name'
+            'title' => 'name',
         ]);
-
-        $table->column('名称', 'name');
-        $column = $table->column('操作')->width(150);
-
-        $column->link('新增', 'admin.article.articleClass.page', ['model' => $this->modelId, 'class_id' => 'class_id']);
-        $column->link('编辑', 'admin.article.articleClass.page', ['model' => $this->modelId, 'id' => 'class_id']);
-        $column->link('删除', 'admin.article.articleClass.del', ['model' => $this->modelId, 'id' => 'class_id']);
-
         return $table;
     }
 
@@ -42,9 +33,11 @@ class ArticleClass extends ArticleExpend
         $form = new Form(new $this->model());
         $form->dialog(true);
         $form->action(route('admin.article.articleClass.save', ['model' => $this->modelId, 'id' => $id]));
+
         $form->cascader('上级分类', 'parent_id', function ($value) {
             return $this->model::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
-        })->default($classId)->leaf(false);
+        })->default($classId);
+
         $form->text('分类名称', 'name')->verify([
             'required',
         ], [
@@ -67,13 +60,13 @@ class ArticleClass extends ArticleExpend
             $model->model_id = $this->modelId;
             return $model;
         });
-        $form->script(static function () {
+        /* $form->script(static function () {
             return <<<JS
                 window['selectUrl'] = function(url) {
                     $('input[name="url"]').val(url)
                 }
             JS;
-        });
+        }); */
         return $form;
     }
 
