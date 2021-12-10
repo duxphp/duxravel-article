@@ -42,7 +42,7 @@
         "src/Article/Route/Web.php"
       ],
       "menu": [
-        "src/Article/Menu/Admin.php",
+        "src/Article/Menu/Admin.php"
       ],
       "listener":[
         "Modules\\Article\\Listeners\\InstallSeed"
