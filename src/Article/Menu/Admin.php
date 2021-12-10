@@ -12,8 +12,8 @@ Menu::add('article', [
         'name' => '内容管理',
         'order' => 0,
     ], function () {
-        $model = app(\Modules\Article\Model\ArticleModel::class)->get();
-        $menuList = $model->map(function ($item) {
+        $model = \Modules\Article\Model\ArticleModel::get();
+        $model->map(function ($item) {
             Menu::link($item['name'] . '管理', 'admin.article.article', ['model' => $item['model_id']]);
         });
     });
