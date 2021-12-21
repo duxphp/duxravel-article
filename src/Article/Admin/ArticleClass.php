@@ -36,7 +36,7 @@ class ArticleClass extends ArticleExpend
 
         $form->cascader('上级分类', 'parent_id', function ($value) {
             return $this->model::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
-        })->default($classId);
+        })->leaf(false)->default($classId);
 
         $form->text('分类名称', 'name')->verify([
             'required',
@@ -59,13 +59,6 @@ class ArticleClass extends ArticleExpend
             $model->model_id = $this->modelId;
             return $model;
         });
-        /* $form->script(static function () {
-            return <<<JS
-                window['selectUrl'] = function(url) {
-                    $('input[name="url"]').val(url)
-                }
-            JS;
-        }); */
         return $form;
     }
 

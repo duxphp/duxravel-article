@@ -81,7 +81,7 @@ class Article extends ArticleExpend
 
         $table->side(function () {
             return (new Node())->div(function ($node) {
-                $node->div((new Link('添加分类', 'admin.article.articleClass.page', ['model' => $this->modelId]))->button('primary', 'medium', true)->icon('plus')->type('dialog')->getRender())->class('p-2 flex-none');
+                $node->div((new Link('添加分类', 'admin.article.articleClass.page', ['model' => $this->modelId, 'class_id' => '{data.filter.class_id}']))->button('primary', 'medium', true)->icon('plus')->type('dialog')->getRender())->class('p-2 flex-none');
                 $node->div(
                     (new TreeList(request()->get('class_id'), 'class_id'))
                         ->search(true)
@@ -95,12 +95,12 @@ class Article extends ArticleExpend
                             ],
                             'edit' => [
                                 'name' => '编辑',
-                                'url' => app_route('admin.article.articleClass.page', ['class_id' => '{item.rawData.class_id}', 'model' => $this->modelId], false),
+                                'url' => app_route('admin.article.articleClass.page', ['id' => '{item.rawData.class_id}', 'model' => $this->modelId], false),
                                 'type' => 'dialog',
                             ],
                             'del' => [
                                 'name' => '删除',
-                                'url' => app_route('admin.article.articleClass.del', ['class_id' => '{item.rawData.class_id}', 'model' => $this->modelId], false),
+                                'url' => app_route('admin.article.articleClass.del', ['id' => '{item.rawData.class_id}', 'model' => $this->modelId], false),
                                 'type' => 'ajax',
                             ],
                         ])
@@ -130,7 +130,7 @@ class Article extends ArticleExpend
         $form->card(function (Form $form) use ($formId, $info) {
             $form->cascader('分类', 'class_id', function () {
                 return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
-            }, 'class')->must()->multi()->default(request()->get('class_id'));
+            }, 'class')->must()->leaf()->multi()->default(request()->get('class_id'));
             $form->text('标题', 'title');
             $form->text('副标题', 'subtitle');
 
