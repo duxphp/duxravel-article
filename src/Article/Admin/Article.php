@@ -155,7 +155,7 @@ class Article extends ArticleExpend
             $form->editor('内容', 'content');
             $form->select('关键词', 'keyword')->tags();
             $form->textarea('描述', 'description');
-            $form->datetime('发布时间', 'release_time')->default(time());
+            $form->datetime('发布时间', 'release_time')->default(date('Y-m-d H:i:s'));
             $form->text('排序', 'sort')->type('number');
             $form->radio('状态', 'status', [
                 1 => '发布',
