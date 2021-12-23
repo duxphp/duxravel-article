@@ -103,7 +103,7 @@ class Blade
         $data = $data->with('views');
 
         $data = $data->where('status', 1);
-        $data = $data->where('release_time', '<=', time());
+        $data = $data->where('release_at', '<=', date('Y-m-d H:i:s'));
 
         if ($params['model']) {
             $data = $data->where('model_id', $params['model']);
@@ -180,7 +180,7 @@ class Blade
                     });
                     foreach ($sorts as $v) {
                         if ($v === 'time') {
-                            $cloneData = $cloneData->orderBy('release_time', $v);
+                            $cloneData = $cloneData->orderBy('release_at', $v);
                         }
                         if ($v === 'sort') {
                             $cloneData = $cloneData->orderBy('sort', $v);
@@ -198,7 +198,7 @@ class Blade
                     }
                 }
                 if ($key === 'time') {
-                    $data = $data->orderBy('release_time', $vo);
+                    $data = $data->orderBy('release_at', $vo);
                 }
                 if ($key === 'sort') {
                     $data = $data->orderBy('sort', $vo);
