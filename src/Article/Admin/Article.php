@@ -153,9 +153,9 @@ class Article extends ArticleExpend
                 $form->text('虚拟浏览量', 'virtual_view')->type('number');
             });
             $form->editor('内容', 'content');
-            $form->select('关键词', 'keyword')->tags();
+            $form->tags('关键词', 'keyword');
             $form->textarea('描述', 'description');
-            $form->datetime('发布时间', 'release_time')->default(date('Y-m-d H:i:s'));
+            $form->datetime('发布时间', 'release_time')->default(time());
             $form->text('排序', 'sort')->type('number');
             $form->radio('状态', 'status', [
                 1 => '发布',

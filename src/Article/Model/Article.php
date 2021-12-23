@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Article extends \Duxravel\Core\Model\Base
 {
     use SoftDeletes;
-    use \Conner\Tagging\Taggable;
     use \Duxravel\Core\Traits\Form;
     use \Duxravel\Core\Traits\Visitor;
+    use \Modules\Cms\Traits\Tags;
 
     protected array $softCascade = ['profiles'];
 
