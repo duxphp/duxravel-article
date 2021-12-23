@@ -130,7 +130,7 @@ class Article extends ArticleExpend
         $form->card(function (Form $form) use ($formId, $info) {
             $form->cascader('分类', 'class_id', function () {
                 return \Modules\Article\Model\ArticleClass::scoped(['model_id' => $this->modelId])->defaultOrder()->get(['class_id as id', 'parent_id as pid', 'name']);
-            }, 'class')->must()->leaf()->multi()->default(request()->get('class_id'));
+            }, 'class')->must()->leaf(false)->multi()->default(request()->get('class_id'));
             $form->text('标题', 'title');
             $form->text('副标题', 'subtitle');
 
