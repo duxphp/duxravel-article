@@ -15,40 +15,29 @@ class ArticleAttributeTableSeeder extends Seeder
     public function run()
     {
         
-
-        \DB::table('article_attribute')->delete();
-        
-        \DB::table('article_attribute')->insert(array (
-            0 => 
-            array (
-                'attr_id' => 1,
+        \DB::table('article_attribute')->insert([
+            [
                 'name' => '置顶',
-                'create_time' => 1624024482,
-                'update_time' => 1624024482,
-            ),
-            1 => 
-            array (
-                'attr_id' => 2,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
                 'name' => '热门',
-                'create_time' => 1624024856,
-                'update_time' => 1624026827,
-            ),
-            2 => 
-            array (
-                'attr_id' => 3,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
                 'name' => '推荐',
-                'create_time' => 1624024867,
-                'update_time' => 1624024867,
-            ),
-            3 => 
-            array (
-                'attr_id' => 4,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
                 'name' => '精华',
-                'create_time' => 1624024874,
-                'update_time' => 1624026871,
-            ),
-        ));
-        
-        
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+        ]);
+
+
     }
 }

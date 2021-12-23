@@ -14,25 +14,13 @@ class ArticleModelTableSeeder extends Seeder
      */
     public function run()
     {
-        
-
-        \DB::table('article_model')->delete();
-        
-        \DB::table('article_model')->insert(array (
-            0 => 
-            array (
-                'model_id' => 1,
+        \DB::table('article_model')->insert([
+            [
                 'name' => '文章',
                 'form_id' => 0,
-            ),
-            1 => 
-            array (
-                'model_id' => 2,
-                'name' => '视频',
-                'form_id' => 1,
-            ),
-        ));
-        
-        
+            ],
+        ]);
+
+
     }
 }
