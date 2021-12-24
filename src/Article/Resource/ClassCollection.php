@@ -4,8 +4,9 @@ namespace Modules\Article\Resource;
 
 use Duxravel\Core\Resource\BaseCollection;
 
-class ArticleCollection extends BaseCollection
+class ClassCollection extends BaseCollection
 {
+
 
     public function toArray($request)
     {
