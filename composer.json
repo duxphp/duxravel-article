@@ -32,9 +32,6 @@
     },
     "duxravel": {
       "service": [
-        "Modules\\Article\\Service\\Service",
-        "Modules\\Article\\Service\\Menu",
-        "Modules\\Article\\Service\\Type"
       ],
       "route": [
         "src/Article/Route/Api.php",
