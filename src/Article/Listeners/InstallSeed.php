@@ -10,10 +10,11 @@ class InstallSeed
 
     /**
      * @param $event
-     * @return array[]
+     *
+     * @return string
      */
     public function handle($event)
     {
-        return \Duxravel\Article\Seeders\DatabaseSeeder::class;
+        return \Modules\Article\Seeders\DatabaseSeeder::class;
     }
 }
