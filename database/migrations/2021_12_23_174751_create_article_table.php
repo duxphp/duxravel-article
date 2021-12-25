@@ -30,7 +30,7 @@ class CreateArticleTable extends Migration
             $table->timestamp('release_at')->nullable()->comment('自定义发布时间');
             $table->timestamps();
             $table->softDeletes();
-            $table->index(['title', 'content'], 'keyword');
+            $table->fulltext(['title', 'content'], 'keyword');
         });
     }
 
