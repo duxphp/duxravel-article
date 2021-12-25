@@ -15,9 +15,9 @@ class CreateArticleModelTable extends Migration
     {
         Schema::create('article_model', function (Blueprint $table) {
             $table->increments('model_id');
-            $table->char('name', 100)->nullable()->default('')->comment('模型名');
-            $table->string('tpl_content', 250)->nullable()->comment('内容模板');
-            $table->string('tpl_class', 250)->nullable()->comment('分类模板');
+            $table->char('name', 100)->nullable()->comment('模型名');
+            $table->string('tpl_content', 255)->nullable()->comment('内容模板');
+            $table->string('tpl_class', 255)->nullable()->comment('分类模板');
             $table->integer('form_id')->nullable()->comment('表单id');
         });
     }

@@ -15,7 +15,7 @@ class CreateArticleAttributeTable extends Migration
     {
         Schema::create('article_attribute', function (Blueprint $table) {
             $table->increments('attr_id');
-            $table->char('name', 50)->nullable()->default('')->comment('属性名');
+            $table->char('name', 50)->nullable()->comment('属性名');
             $table->timestamps();
         });
     }
