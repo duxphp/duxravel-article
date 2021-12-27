@@ -1,7 +1,7 @@
 {
   "name": "duxphp/duxravel-article",
   "description": "Duxravel Article Application",
-  "type": "library",
+  "type": "duxravel-app",
   "license": "MIT",
   "authors": [
     {
