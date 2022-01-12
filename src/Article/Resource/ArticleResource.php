@@ -20,7 +20,7 @@ class ArticleResource extends BaseResource
             'source' => $this->source,
             'content' => $this->content,
             'view' => $this->views->pv + $this->virtual_view,
-            'class' => ArticleClassResource::collection($this->class)->hide(['content']),
+            'class' => ClassResource::collection($this->class)->hide(['content']),
             'tags' => $this->tags->transform(function ($item) {
                 return $item->only(['name', 'tag_id', 'count', 'value']);
             }),
